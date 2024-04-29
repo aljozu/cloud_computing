@@ -61,9 +61,7 @@ def monitor_vm_info(vm_name):
         print(f"Failed to get information for VM {vm_name}: {e}")
 
        
-def set_cpu_percentage(vm_name, user, ip, percentage):
-    # 1st arhat@192.168.122.163
-    	
+def set_cpu_percentage(vm_name, user, ip, percentage):    	
     # Define the command to set CPU percentage
     cmd = ["ssh", str(user+'@'+ip), "stress-ng", "--cpu", "2", "--cpu-load", str(percentage), "--timeout", "30s"]
 
@@ -71,9 +69,6 @@ def set_cpu_percentage(vm_name, user, ip, percentage):
         # Execute the command
         result = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         time.sleep(15)
-        # Print the output of the command
-        # print(result.stdout)
-        # print(result.stderr)
 
         print(f"CPU percentage set to {percentage}% for VM {vm_name}.")
     except subprocess.CalledProcessError as e:
@@ -88,9 +83,9 @@ def live_migrate_vm(vm_name_source, percentage):
             return
 
         # Connect to the destination hypervisor
-        dest_conn = libvirt.open('qemu+ssh://arhat@192.168.244.131/system')
+        dest_conn = libvirt.open('qemu+ssh://{user}@{ip}/system')
         if dest_conn is None:
-            print('Failed to open connection to qemu+ssh://arhat@192.168.244.131/system')
+            print('Failed to open connection to qemu+ssh://{user}@{ip}/system')
             return
 
         # Find the source domain
